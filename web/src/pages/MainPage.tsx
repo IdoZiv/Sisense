@@ -41,6 +41,11 @@ export default function MainPage() {
     () => ((import.meta.env.VITE_SISENSE_DASHBOARD_OID as string | undefined) ?? '').trim(),
     [],
   )
+  /** Web Access Token (optional). When set, Embed SDK uses WAT instead of SSO. */
+  const wat = useMemo(
+    () => ((import.meta.env.VITE_SISENSE_WAT as string | undefined) ?? '').trim(),
+    [],
+  )
 
   useEffect(() => {
     let cancelled = false
@@ -59,9 +64,8 @@ export default function MainPage() {
       if (!iframeRef.current) return
 
       try {
-        // Ensure the backend has an HttpOnly session cookie for Sisense SSO.
-        // This is needed even if Firebase auth state was restored from local storage.
-        if (user) {
+        // SSO path: mint HttpOnly session cookie for /sso/sisense/login (not used when WAT is set).
+        if (!wat && user) {
           const idToken = await user.getIdToken()
           await fetch('/api/sessionLogin', {
             method: 'POST',
@@ -87,7 +91,7 @@ export default function MainPage() {
           return
         }
 
-        const frame = new SisenseFrame({
+        const frameOptions: Record<string, unknown> = {
           url: sisenseUrl,
           dashboard: dashboardOid,
           settings: {
@@ -96,7 +100,12 @@ export default function MainPage() {
             showRightPane: false,
           },
           element: iframeRef.current,
-        })
+        }
+        if (wat) {
+          frameOptions.wat = wat
+        }
+
+        const frame = new SisenseFrame(frameOptions)
 
         await frame.render()
       } catch (e) {
@@ -109,7 +118,7 @@ export default function MainPage() {
     return () => {
       cancelled = true
     }
-  }, [sisenseUrl, dashboardOid, user])
+  }, [sisenseUrl, dashboardOid, user, wat])
 
   return (
     <div className="page page--dashboard">
