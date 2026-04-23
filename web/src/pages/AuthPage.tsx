@@ -31,6 +31,17 @@ export default function AuthPage() {
       } else {
         await signInWithEmailAndPassword(auth, email, password)
       }
+
+      // Create an HttpOnly Firebase session cookie for Sisense SSO to consume.
+      const idToken = await auth.currentUser?.getIdToken()
+      if (idToken) {
+        await fetch('/api/sessionLogin', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${idToken}` },
+          credentials: 'include',
+        })
+      }
+
       navigate(redirectTo, { replace: true })
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Authentication failed'
@@ -95,6 +106,7 @@ export default function AuthPage() {
             type="button"
             className="link danger"
             onClick={async () => {
+              await fetch('/api/sessionLogout', { method: 'POST', credentials: 'include' })
               await signOut(auth)
             }}
           >

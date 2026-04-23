@@ -117,3 +117,44 @@ input:focus {
   color: rgba(255, 220, 220, 0.95);
   font-size: 13px;
 }
+
+/* Dashboard layout (full page iframe) */
+.page--dashboard {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  place-items: stretch;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.dashboard-header .muted {
+  margin: 0;
+}
+
+.dashboard-header .row {
+  margin-top: 0;
+}
+
+.dashboard-frame-wrap {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+.dashboard-iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}

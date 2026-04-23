@@ -1,0 +1,11 @@
+node_modules/
+lib/
+.env
+.env.local
+.env.*.local
+
+node_modules/
+lib/
+.env
+.env.local
+.env.*.local
