@@ -25,6 +25,9 @@ coverage/
 .env
 .env.*
 !.env.example
+# Catch macOS/duplicate-rename variants like ".env copy.local"
+.env copy*
+.env*.local
 
 # Firebase CLI artifacts (often created locally)
 .firebase/

@@ -12,6 +12,23 @@ cp .env.example .env.local
 npm run dev
 ```
 
+## Local deploy (Firebase Hosting)
+
+Firebase Hosting serves whatever is in `web/dist` after you build. Vite **does not upload `.env` files**; it **inlines** `VITE_*` values at **build time**.
+
+Recommended:
+
+```bash
+cd web
+cp .env.example .env.production.local
+# paste the same VITE_FIREBASE_* values you use locally
+npm run build
+cd ..
+npx firebase-tools deploy --only hosting
+```
+
+Alternative (no file): prefix env vars on the build command in your shell.
+
 ## Enable Email/Password auth
 
 In Firebase Console → **Authentication** → **Sign-in method** → enable **Email/Password**.

@@ -14,6 +14,8 @@ pnpm-debug.log*
 .env
 .env.*
 !.env.example
+.env copy*
+.env*.local
 
 # Firebase CLI artifacts (often created locally)
 .firebase/
